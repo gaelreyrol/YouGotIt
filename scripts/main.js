@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
 	var loader = $("#loader");
-	var picture = $('#my-picture');
+	var picture = $('#picture');
 	var count = 0;
 	var count2 = 0;
 	var degree = 0;
@@ -18,11 +18,11 @@ $(document).ready(function()
 		{
 			clearInterval(timer);
 			$('#loader-knob').fadeOut();
-			$('#my-name').animate({ marginLeft : '-100px', opacity : 1},1000);
-			$('#my-picture-avatar').css('width', count2);
-			$('#my-picture-avatar').animate({height : count2 + 'px'},1000, function()
+			$('#name').animate({ marginLeft : '-100px', opacity : 1},1000);
+			$('#picture-avatar').css('width', count2);
+			$('#picture-avatar').animate({height : count2 + 'px'},1000, function()
 				{
-			$('#my-picture-avatar').css('background-attachment', 'scroll');
+			$('#picture-avatar').css('background-attachment', 'scroll');
 });
 		}
 	}, 10);
@@ -44,14 +44,14 @@ $(document).ready(function()
 			test();
 		}
 	}, 'easeInBounce', 7 );
-	$('#my-picture-avatar').click(function()
+	$('#picture-avatar').click(function()
 	{
-		$('#my-name').animate({ marginLeft : '-200px', opacity : 0},1000);
+		$('#name').animate({ marginLeft : '-200px', opacity : 0},1000);
 		rotation = setInterval(function()
 		{
 		degree++;
-		$('#my-picture').css('-webkit-transform','rotateY(' + degree  + 'deg)');
-		$('#my-picture').css('transform','rotateY(' + degree + 'deg)');
+		$('#picture').css('-webkit-transform','rotateY(' + degree  + 'deg)');
+		$('#picture').css('transform','rotateY(' + degree + 'deg)');
 		if (degree == 90)
 		{
 			clearInterval(rotation);

@@ -1,25 +1,37 @@
 var toggle = 0;
 var size_window = $(window).width();
 var position = (size_window - 1040) / 2;
-var connect = 0;
+var userDetails = null;
+
+
 function isConnect()
 {
-	if(connect == 0)
+	if(!userDetails)
 	{
-		$('#mytoolbar').append('\
+		$('#toolbar').append('\
+			<span id="close">x</span>\
 			<section id="form-connect">\
-			<h3>Connexion</h3>\
-			<input type="text" placeholder="Your Login" id="login"/>\
-			<input type="password" placeholder="Your Password" id="password"/>\
-			<input type="submit" value="Connexion" id="connexion"/>\
+			<h3 class="title-form">Signin <small class="sub-title-form">StreamNation</small></h3>\
+			<div id="errors"></div>\
+			<input type="email" placeholder="E-mail" id="email"/>\
+			<input type="password" placeholder="Password" id="password"/></br>\
+			<input type="checkbox" name="agree" value="yes">I agree with sharing my settings</br>\
+			<input type="submit" class="button" value="Sign In" id="signin"/>\
+			</section></br>\
+			<section id="form-register">\
+				<a href="https://www.streamnation.com/" class="button">Not yet registered ?</a>\
 			</section>');
 	}
 	else
 	{
-		$('#mytoolbar').append('\
-		<img id="my-avatar" src="http://imageshack.com/a/img843/9840/1pl6f.jpg">\
-		<section id="categorie1" class="categorie">Derniers Ajouts</section>\
-		<section id="categorie3" class="categorie">Mes Abonnements</section>\
+		$('#toolbar').append('\
+			<span id="close">x</span>\
+			<img id="avatar" src="' + userDetails.user.avatar_url + '">\
+			<a id="signout" class="button">Sign Out</a>\
+			<a id="profile" class="button">Account Details</a>\
+			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
+			<section class="category">Latest Adds</section>\
+			<section class="category">My Subscribes</section>\
 		');
 	}
 }
@@ -35,7 +47,7 @@ function showToolbar()
 		{
 			right: "300px"
 		}, 1000).fadeIn();
-		$('#mytoolbar').show().animate(
+		$('#toolbar').show().animate(
 		{
 			right: "0px"
 		}, 1000);
@@ -48,7 +60,7 @@ function showToolbar()
 		{
 			$('html').css('position', 'static');
 		});
-		$('#mytoolbar').animate({
+		$('#toolbar').animate({
 			right: "-300px"}, 1000);
 	}
 	toggle = (toggle == 1) ? 0 : 1;
@@ -58,7 +70,7 @@ function showInfoBulle()
 {
 	if(toggle == 0)
 	{
-		$('#mytoolbar, #triangle').show().animate(
+		$('#toolbar, #triangle').show().animate(
 		{
 			bottom: "30px",
 			opacity: 1
@@ -66,13 +78,32 @@ function showInfoBulle()
 	}
 	else
 	{
-		$('#mytoolbar, #triangle').animate({
+		$('#toolbar, #triangle').animate({
 			bottom: "-100px",
 			opacity: 0}, 1000);
 	}
 	toggle = (toggle == 1) ? 0 : 1;
 }
 
-function ActivateIcon() {
-	console.log("activate icon");
+function getUserlocalStorage()
+{
+	if (localStorage['st_user_details'])
+		return JSON.parse(localStorage['st_user_details']);
+	else
+		return null;
 }
+
+function storeUserData(data) {
+	localStorage['st_user_details'] = JSON.stringify(data);
+	console.log("User :" + localStorage['st_user_details']);
+}
+
+function signOutUser() {
+	delete window.localStorage["st_user_details"]
+	userDetails = null;
+	console.log("Disconnect : " + userDetails);
+	showToolbar();
+	$("#toolbar").empty();
+	isConnect();
+}
+

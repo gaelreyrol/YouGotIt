@@ -1,4 +1,4 @@
-#mytoolbar
+#toolbar
 {
 
 	position:fixed;
@@ -30,8 +30,44 @@ body
 h3
 {
 	color: #00b4ff;
-	line-height:52px;
 	font-family: Helvetica;
+}
+
+.title-form {
+	font-size: 30px;
+	padding-bottom: 10px;
+	color: #00b4ff;
+	font-family: Helvetica;
+
+}
+
+.sub-title-form {
+	font-size: 15px;
+	color: white;
+}
+
+.title-welcome {
+	margin-top: 5px;
+	font-size: 30px;
+	color: #00b4ff;
+	font-family: Helvetica;
+
+}
+
+.sub-title-welcome {
+	font-size: 15px;
+	color: white;
+}
+
+
+#close {
+	float: right;
+	cursor: pointer;
+}
+
+#error {
+	color: red;
+	margin-bottom: 5px;
 }
 
 #triangle
@@ -48,6 +84,31 @@ h3
 	border-color: #1a1f24 transparent transparent;
 	border-style: solid;
 	border-width:10px 10px 0px  10px;
+}
+
+.button {
+	border: none;
+	color: white;
+	background: #00b4ff;
+	border-radius:2px;
+	font-family: Helvetica;
+	line-height: normal;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 4px 6px 5px;
+	text-decoration: none;
+	
+}
+
+input[type="email"], input[type="text"], input[type="password"] {
+	color: black;
+	height: 20px;
+	width: 80%;
+	border: solid 1px #00b4ff;
+	border-radius: 2px;
+	font-family: Helvetica;
+	margin-bottom: 7px
+
 }
 
 #streamnation
@@ -79,23 +140,31 @@ h3
 	
 }
 
-.categorie
+.category
 {
+	font-family: Helvetica;
 	padding-bottom:5px;
-	padding-top:25px;
+	padding-top:15px;
 	color: #00b4ff;
-	border-bottom: 1px solid #00b4ff;
+	border-bottom: 3px solid white;
 }
 
-#my-avatar
+#avatar
 {
 	width: 100px;
 	border-radius:100%;
 	margin: 0 auto;
 }
 
-.signout {
-	
+#signout {
+	float: right;
+	margin-top: 40px;
+	margin-right: 40px;
+}
+
+#profile {
+	float: right;
+	margin-right: 30px;
 }
 
 
