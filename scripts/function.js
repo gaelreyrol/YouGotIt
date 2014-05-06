@@ -19,8 +19,7 @@ function isConnect()
 		$('#mytoolbar').append('\
 		<img id="my-avatar" src="http://imageshack.com/a/img843/9840/1pl6f.jpg">\
 		<section id="categorie1" class="categorie">Derniers Ajouts</section>\
-		<section id="categorie2" class="categorie">Categorie2</section>\
-		<section id="categorie3" class="categorie">Categorie3</section>\
+		<section id="categorie3" class="categorie">Mes Abonnements</section>\
 		');
 	}
 }

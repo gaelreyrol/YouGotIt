@@ -29,7 +29,8 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"http://*/*"
+				"http://www.youtube.com/watch*",
+				"https://www.youtube.com/watch*"
 				],
 			"js": [
 				"vendor/jquery-2.1.0.min.js",
