@@ -1,47 +1,67 @@
-var CurrentUrl;
-
+var CurrentTab;
+var ValidPlatform = false;
 var YoutubePattern = "youtube.com/watch"
 
-function init() {
+function Init() {
 	chrome.tabs.query({
 		active: true,
 		lastFocusedWindow: true
 	}, function (e) {
-		CurrentUrl = e[0].url;
-		LaunchYGI();
+		CurrentTab = e[0];
+		subInit();
 	});
 }
 
-function LaunchYGI() {
+function subInit() {
 	var regexUrl = new RegExp(YoutubePattern)
-	if (regexUrl.test(CurrentUrl) == true)
+	if (regexUrl.test(CurrentTab.url) == true)
 	{
-		ToggleYGI(false);
-		//alert("You are on an youtube page: " + CurrentUrl);
+		toggleIcon(false);
+		ValidPlatform = true;
 	}
 	else
 	{
-		ToggleYGI(true);
-		//alert("You are not an youtube page : " + CurrentUrl);
+		toggleIcon(true);
+		ValidPlatform = false;
 	}
 }
 
-function ToggleYGI(active) {
+function toggleIcon(active) {
 	if (active == false) {
 		chrome.browserAction.setIcon({
-			path: "icons/icon19.png"
+			path: "icons/stream-icon19.png"
 		});
 	} else if (active == true) {
 		chrome.browserAction.setIcon({
-			path: "icons/icon19-disable.png"
+			path: "icons/stream-icon19-disable.png"
 		});
 	}
 }
 
+function InsertStreamAdds() {
+	chrome.tabs.executeScript(CurrentTab.id, {
+		code: 'alert("test")'
+	});	
+}
+
+function Launch()
+{
+	if (ValidPlatform == false)
+		return ;
+	alert("Welcome !");
+}
+
 function test() {
-	var url = getActiveUrlTab();
+
 	//alert(CurrentUrl);
 	//alert(url);
 }
 
-chrome.tabs.onActivated.addListener(init);
+chrome.tabs.onActivated.addListener(Init);
+chrome.tabs.onUpdated.addListener(Init);
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+	chrome.tabs.executeScript({
+		code: 'showToolbar();'
+	});
+});

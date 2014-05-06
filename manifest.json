@@ -1,35 +1,47 @@
 {
-	"name": "You Got It",
+	"name": "Stream Nation - You got it",
 	"description": "The best way to get your favorite content automaticaly on StreamNation",
-	"author": "sbodovsk & greyrol",
+	"author": "sbodovsk, gsarfati & greyrol",
 	"version": "0.0.1",
 	"manifest_version": 2,
 	"icons": {
-		"16": "icons/icon16.png",
-		"48": "icons/icon48.png",
-		"128": "icons/icon128.png"
+		"16": "icons/stream-icon16.png",
+		"48": "icons/stream-icon48.png",
+		"128": "icons/stream-icon128.png"
 	},
 	"browser_action": {
 		"default_icon": {
-			"19": "icons/icon19-disable.png",
-			"38": "icons/icon38-disable.png"
+			"19": "icons/stream-icon19-disable.png",
+			"38": "icons/stream-icon38-disable.png"
 		},
-		"default_title": "The best way to get your favorite content automaticaly on StreamNation"
-		/*"default_popup": "browseraction/track.html"*/
+		"default_title": "Stream Nation - You got it"
 	},
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": ["background.js"],
+		"persistent": false
 	},
-	/*"content_scripts": [
+	"permissions": [
+		"activeTab",
+		"tabs",
+		"contentSettings",
+		"http://api.streamnation.com/*"
+	],
+	"content_scripts": [
 		{
 			"matches": [
-				"http://"
+				"http://*/*"
+				],
+			"js": [
+				"vendor/jquery-2.1.0.min.js",
+				"vendor/jquery.custom.js",
+				"vendor/knob.js",
+				"scripts/function.js",
+				"youtube/youtube.js"
+				
 			],
-			"js": ["content.js"]
-		}
-	],*/
-	"permissions": [
-		"tabs"	
-	],
-	"devtools_page": "devtools/devtools.html"
+			"css": [
+				"youtube/youtube.css"	
+			]
+		}	
+	]
 }
