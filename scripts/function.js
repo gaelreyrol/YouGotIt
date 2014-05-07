@@ -5,6 +5,7 @@ var userDetails = null;
 var youtubeId = null;
 var latestAdds = [];
 var videoContent = [];
+var nbDownloading = 0;
 
 function isConnect()
 {
@@ -34,7 +35,9 @@ function isConnect()
 			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
 			<div id="messages"></div>\
 			<section class="category lastest" id="latestAdds"><h3>Latest Adds</h3></br></section>\
-			<section class="category subscribes" id="subscribes"><h3>My Subscribes</h3></section>\
+			<section class="category subscribes" id="subscribes"><h3>My Subscribes</h3></section></br>\
+			<a class="nbdownloads button">Downloading videos : <span id="nbDownload">' + nbDownloading + '</span></a>\
+			<a class="refresh button">Refresh</a>\
 		');
 		getAdds();
 		getSubscribes();
@@ -182,7 +185,7 @@ function appendLatestAdds()
 		<div class="add">\
 		<a href="http://www.streamnation.com/content/' + latestAdds[i].id + '" class="category-latestTitles">' + latestAdds[i].title + '</a>\
 		<figure style="margin: 10px">\
-		<img src=' + latestAdds[i].thumbnails[3].uri + ' width="200px" > \
+		<img style="max-height:112px" src=' + latestAdds[i].thumbnails[3].uri + ' width="200px" > \
 		</figure></div>\
 		');
 	}
@@ -258,11 +261,45 @@ function getAdds() {
 			for (var i = 0; i < data.contents.length; i++)
 			{
 				if (data.contents[i].parent_id == localStorage["st_user_youtube_id"])
-				videoContent.unshift(data.contents[i]);
+					videoContent.unshift(data.contents[i]);
 			}
 			getLatestAdds();
 			appendLatestAdds();
 		}
 	});
+}
+
+function getNbVideosDownloading()
+{
+	var localnb = 0;
+	for (var i = 0; i < videoContent.length; i++)
+	{
+		$.ajax({
+			async: false,
+			type: "GET",
+			url: "http://api.streamnation.com/api/v1/library",
+			data: {auth_token: userDetails.auth_token, parent_id: videoContent[i].id},
+			success: function (data) {
+				for (var i = 0; i < data.library.length; i++)
+				{
+					if (data.library[i].transfer)
+					{
+						localnb++;
+					}
+				}
+			}
+		});
+	}
+	if (localnb != nbDownloading)
+		nbDownloading = localnb;
+	console.log("nb: " + nbDownloading)
+	$('#nbDownload').html(nbDownloading);
+}
+
+function refresh() {
+	$(".sub").fadeOut().remove();
+	$(".add").fadeOut().remove();
+	getAdds();
+	getSubscribes();
 }
 

@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
 	userDetails = getUserlocalStorage();
+	nbDownloading = 0;
 	if (userDetails)
 		youtubeId = getYoutubeId();
 	
@@ -41,7 +42,10 @@ $(document).ready(function()
 		});
 	});
 	$(document).on('click', '#button-sub', function() {
-			
+		
+	});
+	$(document).on('click', '.refresh', function() {
+		refresh();	
 	});
 	$(document).on('click', '.delete-subs', function() {
 		var channelid = $(this).attr("id");
@@ -121,5 +125,6 @@ $(document).ready(function()
 
 	setInterval(function() {
 		$("#success").fadeOut().hidden;
+		getNbVideosDownloading();
 	},6000);
 });
