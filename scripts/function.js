@@ -14,7 +14,7 @@ function isConnect()
 		$('#toolbar').append('\
 			<span id="close">x</span>\
 			<section id="form-connect">\
-			<h3 class="title-form">Signin <small class="sub-title-form">StreamNation</small></h3>\
+			<h3 class="title-form">Sign in <small class="sub-title-form">StreamNation</small></h3>\
 			<div id="errors"></div>\
 			<input type="email" placeholder="E-mail" id="email"/>\
 			<input type="password" placeholder="Password" id="password"/></br></br>\
@@ -29,16 +29,30 @@ function isConnect()
 	{
 		$('#toolbar').append('\
 			<span id="close">x</span>\
+			<section id="container-user">\
+			<canvas  width="125px" height="125px"></canvas>\
+			<input id="loader" value="35" style="display: none; width: 0px; visibility: hidden;">\
 			<img id="avatar" src="' + userDetails.user.avatar_url + '">\
+			<div id="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
+			<section id="data-user">\
+			<section id="content-button">\
 			<a id="signout" class="button">Sign Out</a>\
-			<a id="profile" href="https://www.streamnation.com/settings" class="button">Account Details</a>\
-			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
-			<div id="messages"></div>\
-			<section class="category lastest" id="latestAdds"><h3>Latest Adds</h3></br></section>\
-			<section class="category subscribes" id="subscribes"><h3>My Subscribes</h3></section></br>\
+			<a id="profile" href="https://www.streamnation.com/settings" class="button">Account Details</a></br></br>\
 			<a class="nbdownloads button">Downloading videos : <span id="nbDownload">' + nbDownloading + '</span></a>\
 			<a class="refresh button">Refresh</a>\
-		');
+			</section>\
+			<div id="messages"></div>\
+			</section>\
+			<section class="title-category">Latest Adds</section>\
+			<section class="triangle"></section>\
+			<section id="latestAdds" class="category lastest"></section>\
+			<section class="title-category">My Subscribes</section>\
+			<section class="triangle"></section>\
+			<section id="subscribes" class="category subscribes"></section>\
+			</section>\
+			');
+		initLoader(5);
+
 		getAdds();
 		getSubscribes();
 		/*var i = 0;
@@ -55,17 +69,43 @@ function isConnect()
 		});*/
 	}
 }
+function initLoader(time)
+{
+	var count 	= 0;
+	var loader 	= $('#loader');
+
+	loader.knob(
+	{
+		width 			: 100,
+		displayinput	: false,
+		bgColor			: '#363e47',
+		fgColor			: '#00b4ff',
+		thickness		: '.1'
+	});
+	var anim = setInterval(function()
+	{
+		if(count == 101)
+		{
+			clearInterval(anim);
+			//$('#loader-knob').fadeOut();
+		}
+		count++;
+		loader.val(count);
+		loader.change();
+
+	}, time);
+}
 function showToolbar()
 {
 
 	if(toggle == 0)
 	{
 		$('html').css('right', position + 'px');
-		$('html').css('overflow', 'hidden');
+		//$('html').css('overflow', 'hidden');
 		$('html').css('position', 'absolute');
 		$('html').animate(
 		{
-			right: "300px"
+			right: "310px"
 		}, 1000).fadeIn();
 		$('#toolbar').show().animate(
 		{
@@ -81,7 +121,7 @@ function showToolbar()
 			$('html').css('position', 'static');
 		});
 		$('#toolbar').animate({
-			right: "-300px"}, 1000);
+			right: "-310px"}, 1000);
 	}
 	toggle = (toggle == 1) ? 0 : 1;
 }
@@ -179,14 +219,13 @@ function getYoutubeId() {
 
 function appendLatestAdds()
 {
-	for (var i = 0; i < latestAdds.length; i++)
+	for (var i = 0; i < 3; i++)
 	{
-		$("#latestAdds").append('\
+		$("#latestAdds").html('\
 		<div class="add">\
-		<a href="http://www.streamnation.com/content/' + latestAdds[i].id + '" class="category-latestTitles">' + latestAdds[i].title + '</a>\
-		<figure style="margin: 10px">\
-		<img style="max-height:112px" src=' + latestAdds[i].thumbnails[3].uri + ' width="200px" > \
-		</figure></div>\
+			<a href="http://www.streamnation.com/content/' + latestAdds[i].id + '" class="category-latestTitles">\
+				<img src=' + latestAdds[i].thumbnails[3].uri + ' class="subscribe-img"> \
+			</a></div><section class="title-video">' + latestAdds[i].title + '</section>\
 		');
 	}
 }
@@ -214,17 +253,15 @@ function getSubscribes() {
 function appendSubscribes(content) {
 	for (var i = 0; i < content.length; i++) {
 		if (content[i].cover_thumbs[0]) {
-			$("#subscribes").append('<div class="sub">\
-					<a href="http://www.streamnation.com/library/' + content[i].id + '" class="subscribe-title">\
+			$("#subscribes").prepend('<div class="sub"  id="id_'+ content[i].id + '">\
+					<a href="http://www.streamnation.com/content/' + content[i].id + '" >\
 						<img src=' + content[i].cover_thumbs[0].thumbs[0].uri + ' class="subscribe-img">\
-						<p class="subscribe-desc">' + content[i].title + '<p></a><span id="' + content[i].id + '" class="delete-subs">x</span>\
-					</div>');
+					</a><span class="delete-subs" data-target="id_'+ content[i].id + '" id="'+ content[i].id +'" >x</span><section class="title-video">' + content[i].title + '</section></div>');
 		} else {
-			$("#subscribes").append('<div class="sub">\
-					<a href="http://www.streamnation.com/library/' + content[i].id + '" class="subscribe-title">\
+				$("#subscribes").prepend('<div class="sub" id="id_'+ content[i].id + '">\
+					<a href="http://www.streamnation.com/content/' + content[i].id + '" >\
 						<img src="https://assets.streamnation.com/assets/mosaic/default_collection-52fd46fb597dd0185cc9701fa1fa8143.png" class="subscribe-img">\
-						<p class="subscribe-desc">' + content[i].title + '<p></a><span id="' + content[i].id + '" class="delete-subs">x</span>\
-					</div>');
+					</a><span class="delete-subs" data-target="id_'+ content[i].id + '" id="'+ content[i].id +'">x</span><section class="title-video">' + content[i].title + '</section></div>');
 		}
 	}
 }
@@ -297,8 +334,8 @@ function getNbVideosDownloading()
 }
 
 function refresh() {
-	$(".sub").fadeOut().remove();
-	$(".add").fadeOut().remove();
+	$(".sub").slideUp().remove();
+	$(".add").slideUp().remove();
 	getAdds();
 	getSubscribes();
 }

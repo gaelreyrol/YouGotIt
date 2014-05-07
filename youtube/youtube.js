@@ -49,7 +49,7 @@ $(document).ready(function()
 	});
 	$(document).on('click', '.delete-subs', function() {
 		var channelid = $(this).attr("id");
-		var channel = $("#" + channelid).parent().parent();
+		var target = '#' + $(this).data('target');
 		$.ajax({
 			type: "DELETE",
 			url : "http://api.streamnation.com/api/v1/content/" + channelid,
@@ -58,7 +58,7 @@ $(document).ready(function()
 				$('#messages').prepend("<p id='process'>Waiting...</p>");	
 			},
 			success: function() {
-				channel.fadeOut();
+				$(target).slideUp();
 				$("#process").remove();
 				$('#messages').prepend("<p id='success'>Subscribe deleted !<span id='dismiss'>x</span></p>");
 			},
