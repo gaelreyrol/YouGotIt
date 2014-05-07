@@ -6,7 +6,8 @@
 	right:-300px;
 	height:98%;
 	width:260px;
-	padding-top:2%;
+	/*padding-top:10px;*/
+	padding-top:27px;;
 	padding-left:20px;
 	padding-right:20px;
 	color: white;
@@ -66,8 +67,40 @@ h3
 }
 
 #error {
-	color: red;
-	margin-bottom: 5px;
+	margin-top: 10px;
+	border: none;
+	color: white;
+	background: red;
+	border-radius:2px;
+	font-family: Helvetica;
+	line-height: normal;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 4px 6px 5px;
+	text-decoration: none;
+}
+
+#messages {
+	font-family: Helvetica;
+	font-size: 15px;
+}
+
+#success {
+	margin-top: 10px;
+	border: none;
+	color: white;
+	background: green;
+	border-radius:2px;
+	font-family: Helvetica;
+	line-height: normal;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 4px 6px 5px;
+	text-decoration: none;
+}
+
+#dismiss {
+	float:right;
 }
 
 #triangle

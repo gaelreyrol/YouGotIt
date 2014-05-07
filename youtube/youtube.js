@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
 	userDetails = getUserlocalStorage();
-
-	var channelUrl;
-	var videoUrl;
+	if (userDetails)
+		youtubeId = getYoutubeId();
+	
 
 	$('body').append('<section id="toolbar"></section>');
 	isConnect();
@@ -11,12 +11,28 @@ $(document).ready(function()
 
 
 	$(document).on('click', '#button-add', function() {
-		showToolbar();
-  		if (userDetails)
-		{
-			$('#form-connect').fadeOut().remove();
-			isConnect();
-		}
+		if (toggle == 0)
+			showToolbar();
+		if (!userDetails)
+			return ;
+		var videoUrl = "http://www.youtube.com/watch?v=" + $("meta[itemprop=videoId]").attr("content");
+		channelId = getChannelId(youtubeId);
+		$.ajax({
+			type: "POST",
+			url: "http://api.streamnation.com/api/v1/weblink/download",
+			data: {auth_token: userDetails.auth_token, uri: videoUrl, parent_id: channelId},
+			beforeSend: function () {
+				$('#messages').prepend("<p id='process'>Waiting...</p>");
+			},
+			success: function(data) {
+				$("#process").remove();
+				$('#messages').prepend("<p id='success'>Video added !<span id='dismiss'>x</span></p>");
+			},
+			error: function() {
+				$("#process").remove();
+				$('#messages').prepend("<p id='error'>An error occured, please try again.<span id='dismiss'>x</span></p>");
+			}
+		});
 	});
 	$(document).on('click', '#button-sub', function() {
 			
@@ -70,4 +86,11 @@ $(document).ready(function()
 	$(document).on('click', '#close', function () {
 		showToolbar();	
 	});	
+	$(document).on('click', '#dismiss', function () {
+		$(this).parent().fadeOut().remove();
+	});
+
+	setInterval(function() {
+		$("#success").fadeOut().hidden;
+	},6000);
 });

@@ -2,7 +2,7 @@ var toggle = 0;
 var size_window = $(window).width();
 var position = (size_window - 1040) / 2;
 var userDetails = null;
-
+var youtubeId = null;
 
 function isConnect()
 {
@@ -28,8 +28,9 @@ function isConnect()
 			<span id="close">x</span>\
 			<img id="avatar" src="' + userDetails.user.avatar_url + '">\
 			<a id="signout" class="button">Sign Out</a>\
-			<a id="profile" class="button">Account Details</a>\
+			<a id="profile" href="https://www.streamnation.com/settings" class="button">Account Details</a>\
 			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
+			<div id="messages"></div>\
 			<section class="category">Latest Adds</section>\
 			<section class="category">My Subscribes</section>\
 		');
@@ -106,4 +107,45 @@ function signOutUser() {
 	$("#toolbar").empty();
 	isConnect();
 }
+
+function storeVideoData() {
+		
+}
+
+function getChannelId(parentid) {
+	var channel = null;
+	var channelName = $("a.yt-user-name").attr("href").split("/")[2];
+	$.ajax({
+		type: "POST",
+		url: "http://api.streamnation.com/api/v1/content/collection",
+		data: {auth_token: userDetails.auth_token, title: channelName, parent_id: parentid},
+		async: false,
+		success: function (data) {
+			var content = data.content;
+			channel = content.id;
+		},
+		error: function () {
+			$('#messages').prepend("<p id='error'>An error occured, please try again.<span id='dismiss'>x</span></p>");
+		}
+	});
+	return channel;
+}
+
+function getYoutubeId() {
+	$.ajax({
+		type: "POST",
+		url: "http://api.streamnation.com/api/v1/content/collection",
+		data: {auth_token: userDetails.auth_token, title: "YouTube"},
+		async: false,
+		success: function (data) {
+			var content =  data.content;
+			localStorage["st_user_youtube_id"] = content.id;
+		},
+		error: function () {
+			$('#messages').prepend("<p id='error'>An error occured, please try again.<span id='dismiss'>x</span></p>");
+		}
+	});
+	return localStorage["st_user_youtube_id"];
+}
+
 
