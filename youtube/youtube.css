@@ -25,7 +25,6 @@ html
 body 
 {
 	width:100%;
-	overflow:hidden;
 }
 
 h3
@@ -66,6 +65,11 @@ h3
 	cursor: pointer;
 }
 
+#errors {
+width: 80%;
+margin-bottom: 10px;
+}
+
 #error {
 	margin-top: 10px;
 	border: none;
@@ -83,6 +87,8 @@ h3
 #messages {
 	font-family: Helvetica;
 	font-size: 15px;
+	width: 80%;
+
 }
 
 #success {
@@ -200,10 +206,88 @@ input[type="email"], input[type="text"], input[type="password"] {
 	margin-right: 30px;
 }
 
+div.sub {
+	margin: 0 auto;
+	width: 80%;
+	margin-top:15px;
+}
+
+div.add {
+	margin-bottom: 10px;
+}
+
+.subscribe-title {
+	font-size: 15px;
+	color: white;
+	z-index: 100;
+}
+
+.subscribe-img {
+	width: 150px;
+	border-radius: 2px;
+	border: 2px solid #00b4ff;
+	max-height: 150px;
+	margin-bottom: -20px;
+}
+
+.subscribe-img:hover {
+ 	border-color: white;
+}
+
+.subscribe-desc {
+	margin-left: 10px;
+	margin-bottom: 15px;
+	font-size: 10px;
+}
+
+.delete-subs {
+	margin-top: -160px;
+	margin-left: 140px;
+	position: absolute;
+	float: left;
+	color: white;
+	cursor: pointer;
+}
 
 /*    ///////////////////////////////     */
 
+.bar {
+  position: relative;
+  height: 2px;
+  width: 500px;
+  margin: 0 auto;
+  background: #fff;
+  margin-top: 150px;
+}
 
+.circle {
+  position: absolute;
+  top: -30px;
+  margin-left: -30px;
+  height: 60px;
+  width: 60px;
+  left: 0;
+  background: #fff;
+  border-radius: 30%;
+  -webkit-animation: move 5s infinite;
+}
+
+#wait {
+  position: absolute;
+  top: -35px;
+  right: -85px;
+  text-transform: uppercase;
+  color: #347fc3;
+  font-family: helvetica, sans-serif;
+  font-weight: bold;
+}
+
+@-webkit-keyframes move {
+  0% {left: 0;}
+  50% {left: 100%; -webkit-transform: rotate(450deg); width: 150px; height: 150px;}
+  75% {left: 100%; -webkit-transform: rotate(450deg); width: 150px; height: 150px;}
+  100 {right: 100%;}
+}
 
 
 

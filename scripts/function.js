@@ -3,7 +3,8 @@ var size_window = $(window).width();
 var position = (size_window - 1040) / 2;
 var userDetails = null;
 var youtubeId = null;
-var latestAdds = null;
+var latestAdds = [];
+var videoContent = [];
 
 function isConnect()
 {
@@ -25,16 +26,6 @@ function isConnect()
 	}
 	else
 	{
-		$.ajax({
-			type: "GET",
-			url: "http://api.streamnation.com/api/v1/content",
-			data: {auth_token: userDetails.auth_token, sort_by:"created_at", per_page:3},
-			success: function(data) {
-				latestAdds = data.library;
-				appendLatestAdds();
-			}
-		});
-
 		$('#toolbar').append('\
 			<span id="close">x</span>\
 			<img id="avatar" src="' + userDetails.user.avatar_url + '">\
@@ -42,9 +33,11 @@ function isConnect()
 			<a id="profile" href="https://www.streamnation.com/settings" class="button">Account Details</a>\
 			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
 			<div id="messages"></div>\
-			<section class="category">Latest Adds</section>\
-			<section class="category">My Subscribes</section>\
+			<section class="category lastest" id="latestAdds"><h3>Latest Adds</h3></br></section>\
+			<section id="subscribes" class="category subscribes"><h3>My Subscribes</h3></section>\
 		');
+		getAdds();
+		getSubscribes();
 	}
 }
 function showToolbar()
@@ -174,13 +167,90 @@ function appendLatestAdds()
 	for (var i = 0; i < latestAdds.length; i++)
 	{
 		$("#latestAdds").append('\
-		<br>\
+		<div class="add">\
 		<a href="http://www.streamnation.com/content/' + latestAdds[i].id + '" class="category-latestTitles">' + latestAdds[i].title + '</a>\
 		<figure style="margin: 10px">\
 		<img src=' + latestAdds[i].thumbnails[3].uri + ' width="200px" > \
-		</figure> \
+		</figure></div>\
 		');
 	}
 }
 
+function getSubscribes() {
+	$.ajax({
+		type: "GET",
+		url: "http://api.streamnation.com/api/v1/library",
+		data: {auth_token: userDetails.auth_token, parent_id: youtubeId, per_page: 5},
+		beforeSend: function () {
+			$('#subs').prepend("<div class='bar'><div class='circle'></div><p id='wait'>Loading</p></div>");
+		},
+		success: function (data) {
+			$('.bar').fadeOut();
+			var content = data.library;
+			appendSubscribes(content);
+		},
+		error: function () {
+			$('.bar').fadeOut();
+			$('#messages').prepend("<p id='error'>An error occured, please try again.<span id='dismiss'>x</span></p>");
+		}
+	})
+}
+
+function appendSubscribes(content) {
+	for (var i = 0; i < content.length; i++) {
+		if (content[i].cover_thumbs[0]) {
+			$("#subscribes").append('<div class="sub">\
+					<a href="http://www.streamnation.com/library/' + content[i].id + '" class="subscribe-title">\
+						<img src=' + content[i].cover_thumbs[0].thumbs[0].uri + ' class="subscribe-img">\
+						<p class="subscribe-desc">' + content[i].title + '<p></a><span id="' + content[i].id + '" class="delete-subs">x</span>\
+					</div>');
+		} else {
+			$("#subscribes").append('<div class="sub">\
+					<a href="http://www.streamnation.com/library/' + content[i].id + '" class="subscribe-title">\
+						<img src="https://assets.streamnation.com/assets/mosaic/default_collection-52fd46fb597dd0185cc9701fa1fa8143.png" class="subscribe-img">\
+						<p class="subscribe-desc">' + content[i].title + '<p></a><span id="' + content[i].id + '" class="delete-subs">x</span>\
+					</div>');
+		}
+	}
+}
+
+function getLatestAdds()
+{
+	for (var i = 0; i < videoContent.length; i++)
+	{
+		$.ajax({
+			async: false,
+			type: "GET",
+			url: "http://api.streamnation.com/api/v1/content",
+			data: {auth_token: userDetails.auth_token, type: "VideoContent", parent_id: videoContent[i].id},
+			success: function (data) {
+				for (var i = 0; i < data.contents.length; i++)
+				{
+					latestAdds.unshift(data.contents[i]);
+					if (latestAdds.length > 3)
+					{
+						latestAdds.sort(function(a, b) { return a.created_at - b.created_at});
+						latestAdds.pop();
+					}
+				}
+			}
+		});
+	}
+}
+function getAdds() {
+	$.ajax({
+		type: "GET",
+		url: "http://api.streamnation.com/api/v1/content",
+		data: {auth_token: userDetails.auth_token, type:"CollectionContent"},
+		success: function(data) {
+			for (var i = 0; i < data.contents.length; i++)
+			{
+				if (data.contents[i].parent_id == localStorage["st_user_youtube_id"])
+				videoContent.unshift(data.contents[i]);
+			}
+			getLatestAdds();
+			appendLatestAdds();
+		}
+	});
+}
 

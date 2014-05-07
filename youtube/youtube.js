@@ -27,7 +27,12 @@ $(document).ready(function()
 			success: function(data) {
 				storeVideoData(data.content);
 				$("#process").remove();
+				$(".sub").fadeOut().remove();
+				$(".add").fadeOut().remove();
 				$('#messages').prepend("<p id='success'>Video added !<span id='dismiss'>x</span></p>");
+				getAdds();
+				getSubscribes();
+				
 			},
 			error: function() {
 				$("#process").remove();
@@ -38,7 +43,29 @@ $(document).ready(function()
 	$(document).on('click', '#button-sub', function() {
 			
 	});
+	$(document).on('click', '.delete-subs', function() {
+		var channelid = $(this).attr("id");
+		var channel = $("#" + channelid).parent().parent();
+		$.ajax({
+			type: "DELETE",
+			url : "http://api.streamnation.com/api/v1/content/" + channelid,
+			data: {auth_token: userDetails.auth_token},
+			BeforeSend: function() {
+				$('#messages').prepend("<p id='process'>Waiting...</p>");	
+			},
+			success: function() {
+				channel.fadeOut();
+				$("#process").remove();
+				$('#messages').prepend("<p id='success'>Subscribe deleted !<span id='dismiss'>x</span></p>");
+			},
+			error: function() {
+				$("#process").remove();
+				$('#messages').prepend("<p id='error'>An error occured, please try again.<span id='dismiss'>x</span></p>");
+			}
+		});
+	});
 	$(document).on('click', '#signin', function() {
+		console.log("login");
 		var emailInput = $("#email").val();
 		var passwordInput = $("#password").val();
 		var agreeCheck = $("#agree");
@@ -46,14 +73,14 @@ $(document).ready(function()
 		{
 			if ($("#error").length)
 				$("#error").remove();
-			$('#errors').prepend("<p id='error'>E-mail or password incorrect.");
+			$('#errors').prepend("<p id='error'>E-mail or password incorrect.<span id='dismiss'>x</span></p>");
 			return ;
 		}
 		if (!agreeCheck.prop('checked', true))
 		{
-			if (!$("#error").length)
+			if ($("#error").length)
 				$("#error").remove();
-			$('#errors').prepend("<p id='error'>You must agree to use this.</p>");
+			$('#errors').prepend("<p id='error'>You must agree to use this.<span id='dismiss'>x</span></p>");
 			return ;
 		}
 		$.ajax({
@@ -70,6 +97,7 @@ $(document).ready(function()
 				console.log("Connected");
 				storeUserData(data);
 				userDetails = getUserlocalStorage();
+				youtubeId = getYoutubeId();
   				isConnect();
 			},
 			error: function() {
