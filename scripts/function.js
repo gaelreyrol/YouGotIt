@@ -16,12 +16,12 @@ function isConnect()
 			<h3 class="title-form">Signin <small class="sub-title-form">StreamNation</small></h3>\
 			<div id="errors"></div>\
 			<input type="email" placeholder="E-mail" id="email"/>\
-			<input type="password" placeholder="Password" id="password"/></br>\
-			<input type="checkbox" name="agree" value="yes">I agree with sharing my settings</br>\
-			<input type="submit" class="button" value="Sign In" id="signin"/>\
+			<input type="password" placeholder="Password" id="password"/></br></br>\
+			<input type="checkbox" name="agree" value="yes">I agree with sharing my settings</br></br>\
+			<input type="submit" class="" value="Sign In" id="signin"/>\
 			</section></br>\
 			<section id="form-register">\
-				<a href="https://www.streamnation.com/" class="button">Not yet registered ?</a>\
+				<a href="https://www.streamnation.com/" class="register">Not yet registered ?</a>\
 			</section>');
 	}
 	else
@@ -34,10 +34,22 @@ function isConnect()
 			<div class="title-welcome"><small class="sub-title-welcome">Hello, </small> ' + userDetails.user.first_name + '</div>\
 			<div id="messages"></div>\
 			<section class="category lastest" id="latestAdds"><h3>Latest Adds</h3></br></section>\
-			<section id="subscribes" class="category subscribes"><h3>My Subscribes</h3></section>\
+			<section class="category subscribes" id="subscribes"><h3>My Subscribes</h3></section>\
 		');
 		getAdds();
 		getSubscribes();
+		/*var i = 0;
+		$('.category').each(function()
+		{
+			var target = $(this);
+
+			setTimeout(function()
+			{
+				i++;
+				console.log(i);
+				$('#category'+i).fadeIn().removeClass('hidden');
+			}, i * 3000);
+		});*/
 	}
 }
 function showToolbar()
