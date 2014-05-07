@@ -9,3 +9,5 @@ Chrome extension that allow user to get automaticaly video stored form available
 Available platform for You Got It :
 
  - Youtube
+
+by sbodovsk, gsarfati and greyrol
