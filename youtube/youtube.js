@@ -25,6 +25,7 @@ $(document).ready(function()
 				$('#messages').prepend("<p id='process'>Waiting...</p>");
 			},
 			success: function(data) {
+				storeVideoData(data.content);
 				$("#process").remove();
 				$('#messages').prepend("<p id='success'>Video added !<span id='dismiss'>x</span></p>");
 			},

@@ -3,6 +3,7 @@ var size_window = $(window).width();
 var position = (size_window - 1040) / 2;
 var userDetails = null;
 var youtubeId = null;
+var latestAdds = null;
 
 function isConnect()
 {
@@ -24,6 +25,16 @@ function isConnect()
 	}
 	else
 	{
+		$.ajax({
+			type: "GET",
+			url: "http://api.streamnation.com/api/v1/content",
+			data: {auth_token: userDetails.auth_token, sort_by:"created_at", per_page:3},
+			success: function(data) {
+				latestAdds = data.library;
+				appendLatestAdds();
+			}
+		});
+
 		$('#toolbar').append('\
 			<span id="close">x</span>\
 			<img id="avatar" src="' + userDetails.user.avatar_url + '">\
@@ -96,11 +107,15 @@ function getUserlocalStorage()
 
 function storeUserData(data) {
 	localStorage['st_user_details'] = JSON.stringify(data);
+	localStorage['st_user_youtube_id'] = null;
+	localStorage['st_user_videos'] = JSON.stringify([]);
 	console.log("User :" + localStorage['st_user_details']);
 }
 
 function signOutUser() {
-	delete window.localStorage["st_user_details"]
+	delete window.localStorage["st_user_details"];
+	delete window.localStorage["st_user_youtube_id"];
+	delete window.localStorage["st_user_videos"];
 	userDetails = null;
 	console.log("Disconnect : " + userDetails);
 	showToolbar();
@@ -108,8 +123,14 @@ function signOutUser() {
 	isConnect();
 }
 
-function storeVideoData() {
-		
+function storeVideoData(data) {
+	var stored = JSON.parse(localStorage["st_user_videos"]);
+	stored.push({
+			"auth_token": userDetails.auth_token,
+			"creation" : data.created_at,
+			"videoId" : data.id
+	});
+	localStorage.setItem("st_user_videos", JSON.stringify(stored));
 }
 
 function getChannelId(parentid) {
@@ -146,6 +167,20 @@ function getYoutubeId() {
 		}
 	});
 	return localStorage["st_user_youtube_id"];
+}
+
+function appendLatestAdds()
+{
+	for (var i = 0; i < latestAdds.length; i++)
+	{
+		$("#latestAdds").append('\
+		<br>\
+		<a href="http://www.streamnation.com/content/' + latestAdds[i].id + '" class="category-latestTitles">' + latestAdds[i].title + '</a>\
+		<figure style="margin: 10px">\
+		<img src=' + latestAdds[i].thumbnails[3].uri + ' width="200px" > \
+		</figure> \
+		');
+	}
 }
 
 
